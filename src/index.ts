@@ -2,31 +2,48 @@ type CallbackType = (a: boolean) => void;
 type UnsubscribeType = () => void;
 
 export class WebScrollingIsTheWorst {
-    private callbacks: CallbackType[] = [];
+    private bottomCallbacks: CallbackType[] = [];
+    private topCallbacks: CallbackType[] = [];
     constructor() {
         document.addEventListener("scroll", (event) => {
             if (this.getDocHeight() == this.getScrollXY().scrOfY + window.innerHeight) {
-                this.bottomTouched();
+                this.windowBottomTouched();
+            }
+            if (this.getScrollXY().scrOfY == 0) {
+                this.windowTopTouched();
             }
         });
     }
 
-    private bottomTouched() {
-        for (let callback of this.callbacks) {
+    private windowBottomTouched() {
+        for (let callback of this.bottomCallbacks) {
+            callback(true);
+        }
+    }
+
+    private windowTopTouched() {
+        for (let callback of this.topCallbacks) {
             callback(true);
         }
     }
 
     onWindowTouchBottom(callback: CallbackType): UnsubscribeType {
         if (callback) {
-            this.callbacks.push(callback);
+            this.bottomCallbacks.push(callback);
         }
-        return this.generateUnsubscription(callback);
+        return this.generateUnsubscription(this.bottomCallbacks, callback);
     }
 
-    private generateUnsubscription(callback: CallbackType): UnsubscribeType {
+    onWindowTouchTop(callback: CallbackType): UnsubscribeType {
+        if (callback) {
+            this.topCallbacks.push(callback);
+        }
+        return this.generateUnsubscription(this.topCallbacks, callback);
+    }
+
+    private generateUnsubscription(callbacks: CallbackType[], callback: CallbackType): UnsubscribeType {
         return () => {
-            this.callbacks.filter((call) => {
+            callbacks.filter((call) => {
                 call !== callback
             })
         };

@@ -1,29 +1,44 @@
 var WebScrollingIsTheWorst = /** @class */ (function () {
     function WebScrollingIsTheWorst() {
         var _this = this;
-        this.callbacks = [];
+        this.bottomCallbacks = [];
+        this.topCallbacks = [];
         document.addEventListener("scroll", function (event) {
             if (_this.getDocHeight() == _this.getScrollXY().scrOfY + window.innerHeight) {
-                _this.bottomTouched();
+                _this.windowBottomTouched();
+            }
+            if (_this.getScrollXY().scrOfY == 0) {
+                _this.windowTopTouched();
             }
         });
     }
-    WebScrollingIsTheWorst.prototype.bottomTouched = function () {
-        for (var _i = 0, _a = this.callbacks; _i < _a.length; _i++) {
+    WebScrollingIsTheWorst.prototype.windowBottomTouched = function () {
+        for (var _i = 0, _a = this.bottomCallbacks; _i < _a.length; _i++) {
+            var callback = _a[_i];
+            callback(true);
+        }
+    };
+    WebScrollingIsTheWorst.prototype.windowTopTouched = function () {
+        for (var _i = 0, _a = this.topCallbacks; _i < _a.length; _i++) {
             var callback = _a[_i];
             callback(true);
         }
     };
     WebScrollingIsTheWorst.prototype.onWindowTouchBottom = function (callback) {
         if (callback) {
-            this.callbacks.push(callback);
+            this.bottomCallbacks.push(callback);
         }
-        return this.generateUnsubscription(callback);
+        return this.generateUnsubscription(this.bottomCallbacks, callback);
     };
-    WebScrollingIsTheWorst.prototype.generateUnsubscription = function (callback) {
-        var _this = this;
+    WebScrollingIsTheWorst.prototype.onWindowTouchTop = function (callback) {
+        if (callback) {
+            this.topCallbacks.push(callback);
+        }
+        return this.generateUnsubscription(this.topCallbacks, callback);
+    };
+    WebScrollingIsTheWorst.prototype.generateUnsubscription = function (callbacks, callback) {
         return function () {
-            _this.callbacks.filter(function (call) {
+            callbacks.filter(function (call) {
                 call !== callback;
             });
         };

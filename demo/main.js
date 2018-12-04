@@ -1,5 +1,9 @@
 import {WebScrollingIsTheWorst} from "../dist/index.js";
 let wsitw = new WebScrollingIsTheWorst();
 wsitw.onWindowTouchBottom(() => {
-    alert("U touched me bottom!😳");
+    alert("You touched me bottom!😳");
+});
+
+wsitw.onWindowTouchTop(() => {
+    alert("You touched me hat!🤭");
 });
