@@ -1,11 +1,11 @@
 {
   "name": "webscrollingistheworst",
-  "version": "0.1.0-alpha",
+  "version": "0.1.0",
   "description": "Web Scrolling is the Worst. This package tries to lessen the pain.",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build":"tsc"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
