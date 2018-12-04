@@ -1,6 +1,6 @@
 {
   "name": "webscrollingistheworst",
-  "version": "0.1.2-3",
+  "version": "0.2.0-0",
   "description": "Web Scrolling is the Worst. This package tries to lessen the pain.",
   "main": "dist/index.js",
   "scripts": {
