@@ -1,0 +1,28 @@
+{
+  "name": "webscrollingistheworst",
+  "version": "0.1.0-alpha",
+  "description": "Web Scrolling is the Worst. This package tries to lessen the pain.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build":"tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RafaelMalgor/WebScrollingIsTheWorst.git"
+  },
+  "keywords": [
+    "Web",
+    "Scrolling"
+  ],
+  "author": "Rafael Malgor",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RafaelMalgor/WebScrollingIsTheWorst/issues"
+  },
+  "homepage": "https://github.com/RafaelMalgor/WebScrollingIsTheWorst#readme",
+  "dependencies": {
+    "rxjs": "^6.3.3",
+    "typescript": "^3.2.1"
+  }
+}
