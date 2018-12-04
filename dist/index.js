@@ -23,10 +23,10 @@ var WebScrollingIsTheWorst = /** @class */ (function () {
         var dur = 1000;
         var stepS = 15;
         if (duration) {
-            dur = 1000;
+            dur = duration;
         }
         if (stepSize) {
-            stepS = 15;
+            stepS = stepSize;
         }
         var totalOfSteps = this.getScrollXY().scrOfY / stepS;
         var speed = totalOfSteps / dur;

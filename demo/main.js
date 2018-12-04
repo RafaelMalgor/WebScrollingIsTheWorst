@@ -9,7 +9,7 @@ wsitw.onWindowTouchTop(() => {
 });
 
 document.querySelector("#scroll-top").addEventListener("click", () => {
-    wsitw.scrollToTop(25, 50);
+    wsitw.scrollToTop(1000, 50);
 });
 
 document.querySelector("#scroll-bottom").addEventListener("click", () => {
