@@ -1,0 +1,12 @@
+html {
+    overflow-y: scroll;
+}
+
+body {
+    background: rgb(128, 83, 0);
+    height: 2500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
