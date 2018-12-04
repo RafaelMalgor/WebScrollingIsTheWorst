@@ -3,15 +3,27 @@ var WebScrollingIsTheWorst = /** @class */ (function () {
         var _this = this;
         this.bottomCallbacks = [];
         this.topCallbacks = [];
+        this.upCallbacks = [];
+        this.downCallbacks = [];
+        this.latestPosition = this.getScrollXY();
         document.addEventListener("scroll", function (event) {
             if (_this.isOnBottom()) {
-                _this.windowBottomTouched();
+                _this.runCallbacks(_this.bottomCallbacks);
             }
             if (_this.isOnTop()) {
-                _this.windowTopTouched();
+                _this.runCallbacks(_this.topCallbacks);
             }
+            if (_this.movedUp()) {
+                _this.runCallbacks(_this.upCallbacks);
+            }
+            if (_this.movedDown()) {
+                _this.runCallbacks(_this.downCallbacks);
+            }
+            _this.latestPosition = _this.getScrollXY();
         });
     }
+    ;
+    ;
     WebScrollingIsTheWorst.prototype.isOnBottom = function () {
         return this.getDocHeight() == this.getScrollXY().scrOfY + window.innerHeight;
     };
@@ -74,15 +86,27 @@ var WebScrollingIsTheWorst = /** @class */ (function () {
         }
         return this.generateUnsubscription(this.topCallbacks, callback);
     };
-    WebScrollingIsTheWorst.prototype.windowBottomTouched = function () {
-        for (var _i = 0, _a = this.bottomCallbacks; _i < _a.length; _i++) {
-            var callback = _a[_i];
-            callback(true);
+    WebScrollingIsTheWorst.prototype.onScrollMoveUp = function (callback) {
+        if (callback) {
+            this.upCallbacks.push(callback);
         }
+        return this.generateUnsubscription(this.upCallbacks, callback);
     };
-    WebScrollingIsTheWorst.prototype.windowTopTouched = function () {
-        for (var _i = 0, _a = this.topCallbacks; _i < _a.length; _i++) {
-            var callback = _a[_i];
+    WebScrollingIsTheWorst.prototype.onScrollMoveDown = function (callback) {
+        if (callback) {
+            this.downCallbacks.push(callback);
+        }
+        return this.generateUnsubscription(this.downCallbacks, callback);
+    };
+    WebScrollingIsTheWorst.prototype.movedUp = function () {
+        return this.latestPosition.scrOfY > this.getScrollXY().scrOfY;
+    };
+    WebScrollingIsTheWorst.prototype.movedDown = function () {
+        return this.latestPosition.scrOfY < this.getScrollXY().scrOfY;
+    };
+    WebScrollingIsTheWorst.prototype.runCallbacks = function (callbacks) {
+        for (var _i = 0, callbacks_1 = callbacks; _i < callbacks_1.length; _i++) {
+            var callback = callbacks_1[_i];
             callback(true);
         }
     };

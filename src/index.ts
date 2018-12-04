@@ -1,25 +1,36 @@
 type CallbackType = (a: boolean) => void;
 type UnsubscribeType = () => void;
-
+type ScrollPosition = { scrOfX: number, scrOfY: number };
 export class WebScrollingIsTheWorst {
     private bottomCallbacks: CallbackType[] = [];
     private topCallbacks: CallbackType[] = [];
+    private upCallbacks: CallbackType[] = [];;
+    private downCallbacks: CallbackType[] = [];;
+    latestPosition: ScrollPosition;
     constructor() {
+        this.latestPosition = this.getScrollXY();
         document.addEventListener("scroll", (event) => {
             if (this.isOnBottom()) {
-                this.windowBottomTouched();
+                this.runCallbacks(this.bottomCallbacks);
             }
             if (this.isOnTop()) {
-                this.windowTopTouched();
+                this.runCallbacks(this.topCallbacks);
             }
+            if (this.movedUp()) {
+                this.runCallbacks(this.upCallbacks);
+            }
+            if (this.movedDown()) {
+                this.runCallbacks(this.downCallbacks);
+            }
+            this.latestPosition = this.getScrollXY();
         });
     }
 
-    public isOnBottom(): boolean {
+    isOnBottom(): boolean {
         return this.getDocHeight() == this.getScrollXY().scrOfY + window.innerHeight;
     }
 
-    public isOnTop(): boolean {
+    isOnTop(): boolean {
         return this.getScrollXY().scrOfY == 0;
     }
 
@@ -75,14 +86,30 @@ export class WebScrollingIsTheWorst {
         return this.generateUnsubscription(this.topCallbacks, callback);
     }
 
-    private windowBottomTouched() {
-        for (let callback of this.bottomCallbacks) {
-            callback(true);
+    onScrollMoveUp(callback: CallbackType) {
+        if (callback) {
+            this.upCallbacks.push(callback);
         }
+        return this.generateUnsubscription(this.upCallbacks, callback);
     }
 
-    private windowTopTouched() {
-        for (let callback of this.topCallbacks) {
+    onScrollMoveDown(callback: CallbackType) {
+        if (callback) {
+            this.downCallbacks.push(callback);
+        }
+        return this.generateUnsubscription(this.downCallbacks, callback);
+    }
+
+    private movedUp(): boolean {
+        return this.latestPosition.scrOfY > this.getScrollXY().scrOfY;
+    }
+
+    private movedDown(): boolean {
+        return this.latestPosition.scrOfY < this.getScrollXY().scrOfY;
+    }
+
+    private runCallbacks(callbacks: CallbackType[]) {
+        for (let callback of callbacks) {
             callback(true);
         }
     }
@@ -96,7 +123,7 @@ export class WebScrollingIsTheWorst {
     }
 
     //below taken from http://www.howtocreate.co.uk/tutorials/javascript/browserwindow
-    private getScrollXY(): { scrOfX: number, scrOfY: number } {
+    private getScrollXY(): ScrollPosition {
         var scrOfX = 0, scrOfY = 0;
         if (typeof (window.pageYOffset) == 'number') {
             //Netscape compliant
