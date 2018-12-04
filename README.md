@@ -4,11 +4,25 @@
 * new WebScrollingIsTheWorst();
     * onWindowTouchBottom(callback): unsubscriber
       * callback: a function that will be executed when the scroll touches the bottom of the page.
-      * un-subscriber: a function to unsubscribe the callback.
+      * unsubscriber: a function to unsubscribe the callback.
 
     * onWindowTouchTop(callback): unsubscriber
       * callback: a function that will be executed when the scroll touches the top of the page.
-      * un-subscriber: a function to unsubscribe the callback.
+      * unsubscriber: a function to unsubscribe the callback.
+
+    * scrollToTop(duration?: number, stepSize?: number)
+      * duration?: how long should it take to get to the top.
+      * stepSize?: how rough or smooth is the trip.
+
+    * scrollToBottom(duration?: number, stepSize?: number)
+      * duration?: how long should it take to get to the bottom.
+      * stepSize?: how rough or smooth is the trip.
+
+    * isOnBottom(): isit
+      * isit: true if scroll already on bottom.
+
+    * isOnTop(): isit
+      * isit: true if scroll already on top.
 
 ## Example
 ```javascript

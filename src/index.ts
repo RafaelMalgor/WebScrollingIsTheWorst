@@ -6,25 +6,59 @@ export class WebScrollingIsTheWorst {
     private topCallbacks: CallbackType[] = [];
     constructor() {
         document.addEventListener("scroll", (event) => {
-            if (this.getDocHeight() == this.getScrollXY().scrOfY + window.innerHeight) {
+            if (this.isOnBottom()) {
                 this.windowBottomTouched();
             }
-            if (this.getScrollXY().scrOfY == 0) {
+            if (this.isOnTop()) {
                 this.windowTopTouched();
             }
         });
     }
 
-    private windowBottomTouched() {
-        for (let callback of this.bottomCallbacks) {
-            callback(true);
-        }
+    public isOnBottom(): boolean {
+        return this.getDocHeight() == this.getScrollXY().scrOfY + window.innerHeight;
     }
 
-    private windowTopTouched() {
-        for (let callback of this.topCallbacks) {
-            callback(true);
+    public isOnTop(): boolean {
+        return this.getScrollXY().scrOfY == 0;
+    }
+
+    scrollToTop(duration?: number, stepSize?: number) {
+        let dur = 1000;
+        let stepS = 15;
+        if (duration) {
+            dur = 1000;
         }
+        if (stepSize) {
+            stepS = 15;
+        }
+        let totalOfSteps = this.getScrollXY().scrOfY / stepS;
+        let speed = totalOfSteps / dur;
+        let intervalDur = 1 / speed;
+        let interval = setInterval(() => {
+            if (!this.isOnTop()) {
+                window.scrollBy(0, -stepS);
+            } else { clearInterval(interval) }
+        }, intervalDur);
+    }
+
+    scrollToBottom(duration?: number, stepSize?: number) {
+        let dur = 1000;
+        let stepS = 15;
+        if (duration) {
+            dur = 1000;
+        }
+        if (stepSize) {
+            stepS = 15;
+        }
+        let totalOfSteps = this.getScrollXY().scrOfY / stepS;
+        let speed = totalOfSteps / dur;
+        let intervalDur = 1 / speed;
+        let interval = setInterval(() => {
+            if (!this.isOnBottom()) {
+                window.scrollBy(0, stepS);
+            } else { clearInterval(interval) }
+        }, intervalDur);
     }
 
     onWindowTouchBottom(callback: CallbackType): UnsubscribeType {
@@ -39,6 +73,18 @@ export class WebScrollingIsTheWorst {
             this.topCallbacks.push(callback);
         }
         return this.generateUnsubscription(this.topCallbacks, callback);
+    }
+
+    private windowBottomTouched() {
+        for (let callback of this.bottomCallbacks) {
+            callback(true);
+        }
+    }
+
+    private windowTopTouched() {
+        for (let callback of this.topCallbacks) {
+            callback(true);
+        }
     }
 
     private generateUnsubscription(callbacks: CallbackType[], callback: CallbackType): UnsubscribeType {

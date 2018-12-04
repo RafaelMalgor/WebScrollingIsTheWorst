@@ -4,14 +4,64 @@ var WebScrollingIsTheWorst = /** @class */ (function () {
         this.bottomCallbacks = [];
         this.topCallbacks = [];
         document.addEventListener("scroll", function (event) {
-            if (_this.getDocHeight() == _this.getScrollXY().scrOfY + window.innerHeight) {
+            if (_this.isOnBottom()) {
                 _this.windowBottomTouched();
             }
-            if (_this.getScrollXY().scrOfY == 0) {
+            if (_this.isOnTop()) {
                 _this.windowTopTouched();
             }
         });
     }
+    WebScrollingIsTheWorst.prototype.isOnBottom = function () {
+        return this.getDocHeight() == this.getScrollXY().scrOfY + window.innerHeight;
+    };
+    WebScrollingIsTheWorst.prototype.isOnTop = function () {
+        return this.getScrollXY().scrOfY == 0;
+    };
+    WebScrollingIsTheWorst.prototype.scrollToTop = function (duration, stepSize) {
+        var _this = this;
+        var dur = 1000;
+        var stepS = 15;
+        if (duration) {
+            dur = 1000;
+        }
+        if (stepSize) {
+            stepS = 15;
+        }
+        var totalOfSteps = this.getScrollXY().scrOfY / stepS;
+        var speed = totalOfSteps / dur;
+        var intervalDur = 1 / speed;
+        var interval = setInterval(function () {
+            if (!_this.isOnTop()) {
+                window.scrollBy(0, -stepS);
+            }
+            else {
+                clearInterval(interval);
+            }
+        }, intervalDur);
+    };
+    WebScrollingIsTheWorst.prototype.scrollToBottom = function (duration, stepSize) {
+        var _this = this;
+        var dur = 1000;
+        var stepS = 15;
+        if (duration) {
+            dur = 1000;
+        }
+        if (stepSize) {
+            stepS = 15;
+        }
+        var totalOfSteps = this.getScrollXY().scrOfY / stepS;
+        var speed = totalOfSteps / dur;
+        var intervalDur = 1 / speed;
+        var interval = setInterval(function () {
+            if (!_this.isOnBottom()) {
+                window.scrollBy(0, stepS);
+            }
+            else {
+                clearInterval(interval);
+            }
+        }, intervalDur);
+    };
     WebScrollingIsTheWorst.prototype.windowBottomTouched = function () {
         for (var _i = 0, _a = this.bottomCallbacks; _i < _a.length; _i++) {
             var callback = _a[_i];
