@@ -22,7 +22,6 @@
   },
   "homepage": "https://github.com/RafaelMalgor/WebScrollingIsTheWorst#readme",
   "dependencies": {
-    "rxjs": "^6.3.3",
     "typescript": "^3.2.1"
   }
 }
