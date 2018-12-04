@@ -45,10 +45,10 @@ var WebScrollingIsTheWorst = /** @class */ (function () {
         var dur = 1000;
         var stepS = 15;
         if (duration) {
-            dur = 1000;
+            dur = duration;
         }
         if (stepSize) {
-            stepS = 15;
+            stepS = stepSize;
         }
         var totalOfSteps = this.getScrollXY().scrOfY / stepS;
         var speed = totalOfSteps / dur;
@@ -62,18 +62,6 @@ var WebScrollingIsTheWorst = /** @class */ (function () {
             }
         }, intervalDur);
     };
-    WebScrollingIsTheWorst.prototype.windowBottomTouched = function () {
-        for (var _i = 0, _a = this.bottomCallbacks; _i < _a.length; _i++) {
-            var callback = _a[_i];
-            callback(true);
-        }
-    };
-    WebScrollingIsTheWorst.prototype.windowTopTouched = function () {
-        for (var _i = 0, _a = this.topCallbacks; _i < _a.length; _i++) {
-            var callback = _a[_i];
-            callback(true);
-        }
-    };
     WebScrollingIsTheWorst.prototype.onWindowTouchBottom = function (callback) {
         if (callback) {
             this.bottomCallbacks.push(callback);
@@ -85,6 +73,18 @@ var WebScrollingIsTheWorst = /** @class */ (function () {
             this.topCallbacks.push(callback);
         }
         return this.generateUnsubscription(this.topCallbacks, callback);
+    };
+    WebScrollingIsTheWorst.prototype.windowBottomTouched = function () {
+        for (var _i = 0, _a = this.bottomCallbacks; _i < _a.length; _i++) {
+            var callback = _a[_i];
+            callback(true);
+        }
+    };
+    WebScrollingIsTheWorst.prototype.windowTopTouched = function () {
+        for (var _i = 0, _a = this.topCallbacks; _i < _a.length; _i++) {
+            var callback = _a[_i];
+            callback(true);
+        }
     };
     WebScrollingIsTheWorst.prototype.generateUnsubscription = function (callbacks, callback) {
         return function () {

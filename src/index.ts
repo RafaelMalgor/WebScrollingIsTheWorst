@@ -46,10 +46,10 @@ export class WebScrollingIsTheWorst {
         let dur = 1000;
         let stepS = 15;
         if (duration) {
-            dur = 1000;
+            dur = duration;
         }
         if (stepSize) {
-            stepS = 15;
+            stepS = stepSize;
         }
         let totalOfSteps = this.getScrollXY().scrOfY / stepS;
         let speed = totalOfSteps / dur;

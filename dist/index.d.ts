@@ -8,10 +8,10 @@ export declare class WebScrollingIsTheWorst {
     isOnTop(): boolean;
     scrollToTop(duration?: number, stepSize?: number): void;
     scrollToBottom(duration?: number, stepSize?: number): void;
-    private windowBottomTouched;
-    private windowTopTouched;
     onWindowTouchBottom(callback: CallbackType): UnsubscribeType;
     onWindowTouchTop(callback: CallbackType): UnsubscribeType;
+    private windowBottomTouched;
+    private windowTopTouched;
     private generateUnsubscription;
     private getScrollXY;
     private getDocHeight;

@@ -11,11 +11,11 @@
       * unsubscriber: a function to unsubscribe the callback.
 
     * scrollToTop(duration?: number, stepSize?: number)
-      * duration?: how long should it take to get to the top.
+      * duration?: how long should it take to get to the top in milliseconds.
       * stepSize?: how rough or smooth is the trip.
 
     * scrollToBottom(duration?: number, stepSize?: number)
-      * duration?: how long should it take to get to the bottom.
+      * duration?: how long should it take to get to the bottom in milliseconds.
       * stepSize?: how rough or smooth is the trip.
 
     * isOnBottom(): isit

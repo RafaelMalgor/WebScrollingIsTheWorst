@@ -9,9 +9,9 @@ wsitw.onWindowTouchTop(() => {
 });
 
 document.querySelector("#scroll-top").addEventListener("click", () => {
-    wsitw.scrollToTop();
+    wsitw.scrollToTop(25, 50);
 });
 
 document.querySelector("#scroll-bottom").addEventListener("click", () => {
-    wsitw.scrollToBottom();
+    wsitw.scrollToBottom(25, 50);
 });
