@@ -4,8 +4,9 @@ type ScrollPosition = { scrOfX: number, scrOfY: number };
 export class WebScrollingIsTheWorst {
     private bottomCallbacks: CallbackType[] = [];
     private topCallbacks: CallbackType[] = [];
-    private upCallbacks: CallbackType[] = [];;
-    private downCallbacks: CallbackType[] = [];;
+    private upCallbacks: CallbackType[] = [];
+    private downCallbacks: CallbackType[] = [];
+    private moveCallbacks: CallbackType[] = [];
     latestPosition: ScrollPosition;
     constructor() {
         this.latestPosition = this.getScrollXY();
@@ -22,6 +23,7 @@ export class WebScrollingIsTheWorst {
             if (this.movedDown()) {
                 this.runCallbacks(this.downCallbacks);
             }
+            this.runCallbacks(this.moveCallbacks);
             this.latestPosition = this.getScrollXY();
         });
     }
@@ -73,31 +75,30 @@ export class WebScrollingIsTheWorst {
     }
 
     onWindowTouchBottom(callback: CallbackType): UnsubscribeType {
-        if (callback) {
-            this.bottomCallbacks.push(callback);
-        }
-        return this.generateUnsubscription(this.bottomCallbacks, callback);
+        return this.registerCallback(this.bottomCallbacks, callback);
     }
 
     onWindowTouchTop(callback: CallbackType): UnsubscribeType {
-        if (callback) {
-            this.topCallbacks.push(callback);
-        }
-        return this.generateUnsubscription(this.topCallbacks, callback);
+        return this.registerCallback(this.topCallbacks, callback);
     }
 
-    onScrollMoveUp(callback: CallbackType) {
-        if (callback) {
-            this.upCallbacks.push(callback);
-        }
-        return this.generateUnsubscription(this.upCallbacks, callback);
+    onScrollMoveUp(callback: CallbackType): UnsubscribeType {
+        return this.registerCallback(this.upCallbacks, callback);
     }
 
-    onScrollMoveDown(callback: CallbackType) {
+    onScrollMoveDown(callback: CallbackType): UnsubscribeType {
+        return this.registerCallback(this.downCallbacks, callback);
+    }
+
+    onScrollMove(callback: CallbackType): UnsubscribeType {
+        return this.registerCallback(this.moveCallbacks, callback);
+    }
+
+    private registerCallback(callbacks: CallbackType[], callback: CallbackType): UnsubscribeType {
         if (callback) {
-            this.downCallbacks.push(callback);
+            callbacks.push(callback);
         }
-        return this.generateUnsubscription(this.downCallbacks, callback);
+        return this.generateUnsubscription(callbacks, callback);
     }
 
     private movedUp(): boolean {
@@ -116,9 +117,14 @@ export class WebScrollingIsTheWorst {
 
     private generateUnsubscription(callbacks: CallbackType[], callback: CallbackType): UnsubscribeType {
         return () => {
-            callbacks.filter((call) => {
+            let filtered = callbacks.filter((call) => {
                 call !== callback
             })
+            if (callbacks == this.topCallbacks) { this.topCallbacks = filtered; }
+            if (callbacks == this.bottomCallbacks) { this.topCallbacks = filtered; }
+            if (callbacks == this.upCallbacks) { this.topCallbacks = filtered; }
+            if (callbacks == this.downCallbacks) { this.topCallbacks = filtered; }
+            if (callbacks == this.moveCallbacks) { this.topCallbacks = filtered; }
         };
     }
 

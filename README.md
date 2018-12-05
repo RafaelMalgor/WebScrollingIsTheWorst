@@ -19,6 +19,10 @@
       * callback: a function that will be executed when the scroll moves downward.
       * unsubscriber: a function to unsubscribe the callback.
 
+    * onScrollMove(callback):unsubscriber
+      * callback: a function that will be executed when the scroll moves in any direction.
+      * unsubscriber: a function to unsubscribe the callback.
+
     * scrollToTop(duration?: number, stepSize?: number)
       * duration?: how long should it take to get to the top in milliseconds.
       * stepSize?: how rough or smooth is the trip.

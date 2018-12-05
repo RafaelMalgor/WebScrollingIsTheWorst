@@ -9,6 +9,7 @@ export declare class WebScrollingIsTheWorst {
     private topCallbacks;
     private upCallbacks;
     private downCallbacks;
+    private moveCallbacks;
     latestPosition: ScrollPosition;
     constructor();
     isOnBottom(): boolean;
@@ -19,6 +20,8 @@ export declare class WebScrollingIsTheWorst {
     onWindowTouchTop(callback: CallbackType): UnsubscribeType;
     onScrollMoveUp(callback: CallbackType): UnsubscribeType;
     onScrollMoveDown(callback: CallbackType): UnsubscribeType;
+    onScrollMove(callback: CallbackType): UnsubscribeType;
+    private registerCallback;
     private movedUp;
     private movedDown;
     private runCallbacks;
