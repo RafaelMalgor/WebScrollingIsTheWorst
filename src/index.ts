@@ -1,25 +1,38 @@
 type CallbackType = (a: boolean) => void;
 type UnsubscribeType = () => void;
-
+type ScrollPosition = { scrOfX: number, scrOfY: number };
 export class WebScrollingIsTheWorst {
     private bottomCallbacks: CallbackType[] = [];
     private topCallbacks: CallbackType[] = [];
+    private upCallbacks: CallbackType[] = [];
+    private downCallbacks: CallbackType[] = [];
+    private moveCallbacks: CallbackType[] = [];
+    latestPosition: ScrollPosition;
     constructor() {
+        this.latestPosition = this.getScrollXY();
         document.addEventListener("scroll", (event) => {
             if (this.isOnBottom()) {
-                this.windowBottomTouched();
+                this.runCallbacks(this.bottomCallbacks);
             }
             if (this.isOnTop()) {
-                this.windowTopTouched();
+                this.runCallbacks(this.topCallbacks);
             }
+            if (this.movedUp()) {
+                this.runCallbacks(this.upCallbacks);
+            }
+            if (this.movedDown()) {
+                this.runCallbacks(this.downCallbacks);
+            }
+            this.runCallbacks(this.moveCallbacks);
+            this.latestPosition = this.getScrollXY();
         });
     }
 
-    public isOnBottom(): boolean {
+    isOnBottom(): boolean {
         return this.getDocHeight() == this.getScrollXY().scrOfY + window.innerHeight;
     }
 
-    public isOnTop(): boolean {
+    isOnTop(): boolean {
         return this.getScrollXY().scrOfY == 0;
     }
 
@@ -62,41 +75,61 @@ export class WebScrollingIsTheWorst {
     }
 
     onWindowTouchBottom(callback: CallbackType): UnsubscribeType {
-        if (callback) {
-            this.bottomCallbacks.push(callback);
-        }
-        return this.generateUnsubscription(this.bottomCallbacks, callback);
+        return this.registerCallback(this.bottomCallbacks, callback);
     }
 
     onWindowTouchTop(callback: CallbackType): UnsubscribeType {
+        return this.registerCallback(this.topCallbacks, callback);
+    }
+
+    onScrollMoveUp(callback: CallbackType): UnsubscribeType {
+        return this.registerCallback(this.upCallbacks, callback);
+    }
+
+    onScrollMoveDown(callback: CallbackType): UnsubscribeType {
+        return this.registerCallback(this.downCallbacks, callback);
+    }
+
+    onScrollMove(callback: CallbackType): UnsubscribeType {
+        return this.registerCallback(this.moveCallbacks, callback);
+    }
+
+    private registerCallback(callbacks: CallbackType[], callback: CallbackType): UnsubscribeType {
         if (callback) {
-            this.topCallbacks.push(callback);
+            callbacks.push(callback);
         }
-        return this.generateUnsubscription(this.topCallbacks, callback);
+        return this.generateUnsubscription(callbacks, callback);
     }
 
-    private windowBottomTouched() {
-        for (let callback of this.bottomCallbacks) {
-            callback(true);
-        }
+    private movedUp(): boolean {
+        return this.latestPosition.scrOfY > this.getScrollXY().scrOfY;
     }
 
-    private windowTopTouched() {
-        for (let callback of this.topCallbacks) {
+    private movedDown(): boolean {
+        return this.latestPosition.scrOfY < this.getScrollXY().scrOfY;
+    }
+
+    private runCallbacks(callbacks: CallbackType[]) {
+        for (let callback of callbacks) {
             callback(true);
         }
     }
 
     private generateUnsubscription(callbacks: CallbackType[], callback: CallbackType): UnsubscribeType {
         return () => {
-            callbacks.filter((call) => {
+            let filtered = callbacks.filter((call) => {
                 call !== callback
             })
+            if (callbacks == this.topCallbacks) { this.topCallbacks = filtered; }
+            if (callbacks == this.bottomCallbacks) { this.topCallbacks = filtered; }
+            if (callbacks == this.upCallbacks) { this.topCallbacks = filtered; }
+            if (callbacks == this.downCallbacks) { this.topCallbacks = filtered; }
+            if (callbacks == this.moveCallbacks) { this.topCallbacks = filtered; }
         };
     }
 
     //below taken from http://www.howtocreate.co.uk/tutorials/javascript/browserwindow
-    private getScrollXY(): { scrOfX: number, scrOfY: number } {
+    private getScrollXY(): ScrollPosition {
         var scrOfX = 0, scrOfY = 0;
         if (typeof (window.pageYOffset) == 'number') {
             //Netscape compliant

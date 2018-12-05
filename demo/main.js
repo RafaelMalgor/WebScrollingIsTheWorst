@@ -8,6 +8,14 @@ wsitw.onWindowTouchTop(() => {
     alert("You touched me hat!🤭");
 });
 
+wsitw.onScrollMoveDown(() => {
+    document.querySelector("#direction").textContent = "Going Down ⬇";
+});
+
+wsitw.onScrollMoveUp(() => {
+    document.querySelector("#direction").textContent = "Going Up ⬆";
+});
+
 document.querySelector("#scroll-top").addEventListener("click", () => {
     wsitw.scrollToTop(1000, 50);
 });

@@ -10,3 +10,11 @@ body {
     justify-content: space-between;
     align-items: center;
 }
+
+#direction {
+    position: fixed;
+    right: 100px;
+    top: 10px;
+    background: rgb(68, 128, 0);
+    font-size: 20px;
+}

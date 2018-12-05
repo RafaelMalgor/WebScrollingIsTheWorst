@@ -1,17 +1,17 @@
 {
   "name": "webscrollingistheworst",
-  "version": "0.2.1-0",
+  "version": "0.3.0",
   "description": "Web Scrolling is the Worst. This package tries to lessen the pain.",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc"
   },
-  "repository": {
+  "repository": { 
     "type": "git",
     "url": "git+https://github.com/RafaelMalgor/WebScrollingIsTheWorst.git"
   },
-  "keywords": [ 
+  "keywords": [
     "Web",
     "Scrolling"
   ],
